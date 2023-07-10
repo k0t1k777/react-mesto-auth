@@ -4,5 +4,6 @@
   font-weight: 400;
   color: white;
   text-align: center;
-  margin: 15px 0 80px;
+  display: block;
+  text-decoration: none;
 }

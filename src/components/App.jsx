@@ -5,7 +5,7 @@ import ImagePopup from "./ImagePopup/ImagePopup.jsx";
 import Footer from "./Footer/Footer.jsx";
 import api from "../utils/api.js";
 import React, { useEffect, useState } from "react";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import CurrentUserContext from "../contexts/CurrentUserContext.js";
 import EditProfilePopup from "./EditProfilePopup/EditProfilePopup.jsx";
 import EditAvatarPopup from "./EditAvatarPopup/EditAvatarPopup.jsx";
@@ -16,9 +16,8 @@ import ProtectedRoute from "./ProtectedRoute/ProtectedRoute.jsx";
 import Login from "./Login/Login.jsx";
 import Register from "./Register/Register.jsx";
 
-
 function App() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -40,17 +39,21 @@ function App() {
 
   //Проверяем токен и перенаправление юзера
   React.useEffect(() => {
+    handleToken();
+  }, []);
+
+  function handleToken() {
     const token = localStorage.getItem("token");
     if (token) {
       auth.getUserToken(token).then((data) => {
         if (data) {
           setEmail(data.data.email);
           handleLoggedIn();
-          history.push("/");
+          navigate("/");
         }
       });
     }
-  }, [history]);
+  }
 
   function handleLoggedIn() {
     setLoggedIn(true);
@@ -74,12 +77,10 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setSelectedCard(null);
     setIsDeletePopupOpen(false);
-    setIsInfoTooltip(
-      {
-        isOpen: false,
-        isSucessfull: false,
-      }
-    )
+    setIsInfoTooltip({
+      isOpen: false,
+      isSucessfull: false,
+    });
   }
 
   function handleCardClick(card) {
@@ -109,7 +110,7 @@ function App() {
     localStorage.removeItem("token");
     setLoggedIn(false);
     setEmail("");
-    history.push("/signin");
+    navigate("/sign-in");
   }
 
   // Лайки
@@ -163,7 +164,7 @@ function App() {
       .then((data) => {
         if (data) {
           handleInfoTooltip(true);
-          history.push("/signin");
+          navigate("/sign-in");
         }
       })
       .catch((error) => {
@@ -180,7 +181,7 @@ function App() {
           setEmail(email);
           setLoggedIn(true);
           localStorage.setItem("token", data.token);
-          history.push("/");
+          navigate("/");
         }
       })
       .catch((error) => {
@@ -201,18 +202,17 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page__content">
-        <Header email={email} exit={handleExit} />
-        <Switch>
-          <Route path="/signin">
-            {console.log('going to login')}
-            <Login onLogin={handleLogin} />
-          </Route>
-          <Route path="/signup">
-            {console.log('going to register')}
-            <Register onRegister={handleRegister} />
-          </Route>
-          <Route path="/">
-            <ProtectedRoute
+        <Header email={email} exit={handleExit} loggedIn={loggedIn} />
+        <Routes>
+          <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
+          <Route
+            path="/sign-up"
+            element={<Register onRegister={handleRegister} />}
+          />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute
                 component={Main}
                 loggedIn={loggedIn}
                 onEditProfile={handleEditProfileClick}
@@ -223,17 +223,9 @@ function App() {
                 onCardLike={handleCardLike}
                 cards={cards}
               />
-          </Route>
-        </Switch>
-
-
-
-        {/* <Routes>
-          <Route>
-            {loggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />}
-          </Route>
-        </Routes>  */}
-       
+            }
+          />
+        </Routes>
 
         <Footer />
 
@@ -264,10 +256,7 @@ function App() {
           onClose={closeAllPopups}
         />
 
-        <InfoTooltip 
-          effect={isInfoTooltip}
-          onClose={closeAllPopups}
-        />
+        <InfoTooltip effect={isInfoTooltip} onClose={closeAllPopups} />
       </div>
     </CurrentUserContext.Provider>
   );

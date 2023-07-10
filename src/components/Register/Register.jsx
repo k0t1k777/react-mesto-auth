@@ -5,8 +5,6 @@ export default function Register({ onRegister }) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  console.log('hello');
-
   function handleSubmit(event) {
     event.preventDefault();
     onRegister(password, email);
@@ -48,8 +46,8 @@ export default function Register({ onRegister }) {
               id="popup__password"
               type="password"
               placeholder="Пароль"
-              minLength="2"
-              maxLength="200"
+              minLength="8"
+              maxLength="16"
               value={password}
               required={true}
               onChange={handleChangePassword}
@@ -65,7 +63,7 @@ export default function Register({ onRegister }) {
           >
             Зарегистрироваться
           </button>
-          <Link to="signin" className="registration__question">
+          <Link to="/sign-in" className="registration__question">
             Уже зарегистрированы? Войти
           </Link>
         </form>

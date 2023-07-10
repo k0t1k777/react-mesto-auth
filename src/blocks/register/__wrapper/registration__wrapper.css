@@ -1,5 +1,6 @@
 .registration__wrapper:first-of-type {
   margin-bottom: 30px;
+  display: flex;
 }
 
 .registration__wrapper:last-of-type {

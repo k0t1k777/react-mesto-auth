@@ -17,7 +17,7 @@ export const getUserToken = (token) => {
 };
 
 export const register = (password, email) => {
-  return fetch(`${Basic_URL}/signup`, {
+  return fetch(`${Basic_URL}/sign-up`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -36,7 +36,7 @@ export const register = (password, email) => {
 };
 
 export const login = (password, email) => {
-  return fetch(`${Basic_URL}/signin`, {
+  return fetch(`${Basic_URL}/sign-in`, {
     method: "POST",
     headers: {
       Accept: "application/json",

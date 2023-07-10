@@ -4,24 +4,19 @@ export default function Login({ onLogin }) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  console.log('redering login')
-
   function handleSubmit(event) {
     event.preventDefault();
-    console.log('handleSubmit')
-    // if (!email || !password) {
-    //   return;
-    // }
+    if (!email || !password) {
+      return;
+    }
     onLogin(password, email);
   }
 
   function handleChangeEmail(event) {
-    console.log('handleChangeEmail')
     setEmail(event.target.value);
   }
 
   function handleChangePassword(event) {
-    console.log('handleChangePassword')
     setPassword(event.target.value);
   }
 
@@ -57,8 +52,8 @@ export default function Login({ onLogin }) {
               id="popup__password"
               type="password"
               placeholder="Пароль"
-              minLength="2"
-              maxLength="200"
+              minLength="8"
+              maxLength="16"
               value={password}
               required={true}
               onChange={handleChangePassword}
