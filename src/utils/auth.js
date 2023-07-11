@@ -1,7 +1,7 @@
-export const Basic_URL = "https://auth.nomoreparties.co";
+export const BasicUrl = "https://auth.nomoreparties.co";
 
 export const getUserToken = (token) => {
-  return fetch(`${Basic_URL}/users/me`, {
+  return fetch(`${BasicUrl}/users/me`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -17,7 +17,7 @@ export const getUserToken = (token) => {
 };
 
 export const register = (password, email) => {
-  return fetch(`${Basic_URL}/signup`, {
+  return fetch(`${BasicUrl}/signup`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -36,7 +36,7 @@ export const register = (password, email) => {
 };
 
 export const login = (password, email) => {
-  return fetch(`${Basic_URL}/signin`, {
+  return fetch(`${BasicUrl}/signin`, {
     method: "POST",
     headers: {
       Accept: "application/json",

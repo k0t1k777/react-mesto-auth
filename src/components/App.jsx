@@ -5,7 +5,7 @@ import ImagePopup from "./ImagePopup/ImagePopup.jsx";
 import Footer from "./Footer/Footer.jsx";
 import api from "../utils/api.js";
 import React, { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import CurrentUserContext from "../contexts/CurrentUserContext.js";
 import EditProfilePopup from "./EditProfilePopup/EditProfilePopup.jsx";
 import EditAvatarPopup from "./EditAvatarPopup/EditAvatarPopup.jsx";
@@ -45,13 +45,18 @@ function App() {
   function handleToken() {
     const token = localStorage.getItem("token");
     if (token) {
-      auth.getUserToken(token).then((data) => {
-        if (data) {
-          setEmail(data.data.email);
-          handleLoggedIn();
-          navigate("/");
-        }
-      });
+      auth
+        .getUserToken(token)
+        .then((data) => {
+          if (data) {
+            setEmail(data.data.email);
+            handleLoggedIn();
+            navigate("/");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }
 
@@ -191,13 +196,17 @@ function App() {
   }
 
   useEffect(() => {
-    Promise.all([api.getInfoUser(), api.getInitialCards()])
-      .then(([infoUser, infoCard]) => {
-        setCurrentUser(infoUser);
-        setCards(infoCard);
-      })
-      .catch((error) => console.error(`Ошибка ${error}`));
-  }, []);
+    if (loggedIn) {
+      Promise.all([api.getInfoUser(), api.getInitialCards()])
+        .then(([infoUser, infoCard]) => {
+          setCurrentUser(infoUser);
+          setCards(infoCard);
+        })
+        .catch((error) =>
+          console.error(`Ошибка загрузки стартовых карточек ${error}`)
+        );
+    }
+  }, [loggedIn]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -208,6 +217,10 @@ function App() {
           <Route
             path="/sign-up"
             element={<Register onRegister={handleRegister} />}
+          />
+          <Route
+            path="*"
+            element={<Navigate to={loggedIn ? "/" : "/sign-in"} />}
           />
           <Route
             path="/"
