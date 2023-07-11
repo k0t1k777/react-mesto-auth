@@ -1,5 +1,12 @@
 export const BasicUrl = "https://auth.nomoreparties.co";
 
+function cheсkResOk(res) {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`);
+}
+
 export const getUserToken = (token) => {
   return fetch(`${BasicUrl}/users/me`, {
     method: "GET",
@@ -8,12 +15,7 @@ export const getUserToken = (token) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then((res) => cheсkResOk(res));
 };
 
 export const register = (password, email) => {
@@ -27,12 +29,7 @@ export const register = (password, email) => {
       password,
       email,
     }),
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then((res) => cheсkResOk(res));
 };
 
 export const login = (password, email) => {
@@ -46,10 +43,5 @@ export const login = (password, email) => {
       password,
       email,
     }),
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then((res) => cheсkResOk(res));
 };
