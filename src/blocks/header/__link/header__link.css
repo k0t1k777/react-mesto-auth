@@ -5,4 +5,13 @@
   text-align: right;
   color: white;
   padding-right: 30px;
+  font-size: 18px;
+  line-height: 22px;
+}
+
+/* 540 */
+@media screen and (max-width: 540px) {
+  .header__link {
+    margin-bottom: 40px;
   }
+}

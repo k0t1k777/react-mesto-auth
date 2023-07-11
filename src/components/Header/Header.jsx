@@ -9,8 +9,8 @@ export default function Header( {loggedIn, email, exit}) {
     <header className="header">
       <img src={logo} className="header__logo" alt="логотип Место" />
       {loggedIn ? (
-        <div className="header__entry">
-          <p>{email}</p>
+        <div className="header__wrapper">
+          <p className="header__email">{email}</p>
           <Link className="header__link" to="/sign-in" onClick={exit}>
             Выйти
           </Link>
