@@ -2,8 +2,7 @@ import React from "react";
 import logo from "../../images/logo.svg";
 import { Link, useLocation } from "react-router-dom";
 
-
-export default function Header( {loggedIn, email, exit}) {
+export default function Header({ loggedIn, email, exit }) {
   const location = useLocation();
   return (
     <header className="header">
